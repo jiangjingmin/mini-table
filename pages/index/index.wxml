@@ -1,0 +1,160 @@
+<!--pages/index/index.wxml-->
+<view class="container">
+  <!-- begin: 交通出行 -->
+  <view class='panel'>
+    <view class='panel-title' data-arrow="arrow1" bindtap="_bindArrowTap">
+      <view class="title-line"></view>
+      <view class="title-text">交通出行</view>
+      <view class="panel-arrow {{arrow1 && 'up'}}">
+        <image src="/images/vs_arrow.png" />
+      </view>
+    </view>
+    <view hidden="{{arrow1}}" class="panel-content">
+      <view class="panel-process">
+        <view class="pro-item">
+          <view class="pro-image">
+            <image src="/images/vs_walk.png" />
+          </view>
+          <view class="pro-text">
+            <text>步行至</text>
+          </view>
+        </view>
+        <view class="pro-item line"></view>
+        <view class="pro-item">
+          <view class="pro-image">
+            <image src="/images/vs_subway.png" />
+          </view>
+          <view class="pro-text">
+            <text>地铁</text>
+          </view>
+        </view>
+        <view class="pro-item line"></view>
+        <view class="pro-item">
+          <view class="pro-image">
+            <image src="/images/vs_bus.png" />
+          </view>
+          <view class="pro-text">
+            <text>公交</text>
+          </view>
+        </view>
+      </view>
+      <view class="table1 datted">
+        <view class="table1-tbody">
+          <view class="table1-row" wx:for="{{compareDateBuilding}}" wx:key="{{item.building_id}}">
+            <view class="table1-col">
+              <text class="building-name">{{item.building_name}}</text>
+            </view>
+            <view class="table1-col">
+              <view class="way-name">{{item.subway_station || '--'}}</view>
+              <view class="way-time" wx:if="{{item.subway_station}}">{{item.subway_time}}分钟</view>
+            </view>
+            <view class="table1-col">
+              <view class="way-name">{{item.bus_station || '--'}}</view>
+              <view class="way-time" wx:if="{{item.bus_station}}">{{item.bus_time}}分钟</view>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+  <!-- end: 交通出行 -->
+  <!-- begin: 楼盘品质 -->
+  <view class='panel'>
+    <view class='panel-title' data-arrow="arrow2" bindtap="_bindArrowTap">
+      <view class="title-line"></view>
+      <view class="title-text">楼盘品质</view>
+      <view class="panel-arrow {{arrow2 && 'up'}}">
+        <image src="/images/vs_arrow.png" />
+      </view>
+    </view>
+    <view hidden="{{arrow2}}" class="tablebox">
+      <view class="table-left">
+        <view class="table-thead-fixed">
+          <view class="col-fixed-top" style="height: {{fixedArray[0].height}}px;">{{fixedData[0]}}</view>
+        </view>
+        <view class="table-tbody-fixed">
+          <block wx:for="{{fixedData}}" wx:key="index" wx:if="{{index > 0}}">
+            <view class="col-fixed-top" style="height: {{fixedArray[index].height - 1}}px;">{{item}}</view>
+          </block>
+        </view>
+      </view>
+      <view class="table-right">
+        <scroll-view scroll-x="{{true}}">
+          <view class="table fixbox" style="text-align: {{ compareDateBuilding.length ==1 ? 'center' : 'left'}}">
+            <view class="table-thead">
+              <view class="table-row">
+                <view class="table-col col-fixed">{{fixedData[0]}}</view>
+                <view class="table-col" wx:for="{{compareDateBuilding}}" wx:key="{{item.building_id}}">{{item.building_name}}</view>
+              </view>
+            </view>
+            <view class="table-tbody">
+              <view class="table-row" wx:for="{{fixedData}}" wx:key="index" wx:if="{{index > 0}}">
+                <view class="table-col col-fixed">{{item}}</view>
+                <view class="table-col" wx:for="{{compareDateBuilding}}" wx:for-item="bditem" wx:for-index="bdindex" wx:key="{{item.building_id}}">
+                  <block wx:if="{{index == 1}}">{{bditem.level || '--'}}</block> <!-- 等级 -->
+                  <block wx:elif="{{index == 2}}">{{bditem.developer || '--'}}</block> <!-- 开发商 -->
+                  <block wx:elif="{{index == 3}}">{{bditem.property_company || '--'}}</block> <!-- 物业公司 -->
+                  <block wx:elif="{{index == 4}}">{{bditem.building_zuo_room_rate || 0}}</block> <!-- 得房率（%） -->
+                  <block wx:elif="{{index == 5}}">{{bditem.air_condition_descript || '--'}}</block> <!-- 空调系统 -->
+                  <block wx:elif="{{index == 6}}">{{bditem.over_parking_number + bditem.under_parking_number || 0}}</block> <!-- 车位数（个） -->
+                  <block wx:elif="{{index == 7}}">{{bditem.parking_price || '--'}}</block> <!-- 车位费（元/月） -->
+                  <block wx:elif="{{index == 8}}">{{bditem.elevator_number + bditem.elevator_goods_number || 0}}个<text class="subtext">(客梯{{bditem.elevator_number || 0}}个货梯{{bditem.elevator_goods_number || 0}}个）</text></block> <!-- 电梯数量 -->
+                  <block wx:else>{{bditem.elevator_brand || '--'}}</block> <!-- 电梯品牌 -->
+                </view>
+              </view>
+            </view>
+          </view>
+        </scroll-view>
+      </view>
+    </view>
+  </view>
+  <!-- end: 楼盘品质 -->
+  <!-- begin: 周边配套 -->
+  <view class='panel'>
+    <view class='panel-title' data-arrow="arrow3" bindtap="_bindArrowTap">
+      <view class="title-line"></view>
+      <view class="title-text">周边配套</view>
+      <view class="panel-arrow {{arrow3 && 'up'}}">
+        <image src="/images/vs_arrow.png" />
+      </view>
+    </view>
+    <view hidden="{{arrow3}}" class="tablebox">
+      <view class="table-left">
+        <view class="table-thead-fixed">
+          <view class="col-fixed-top" style="height: {{fixedArray1[0].height}}px;">{{fixedData1[0]}}</view>
+        </view>
+        <view class="table-tbody-fixed">
+          <block wx:for="{{fixedData1}}" wx:key="index">
+            <view wx:if="{{index > 0}}" class="col-fixed-top" style="height: {{fixedArray1[index].height - 1}}px;">{{item}}</view>
+          </block>
+        </view>
+      </view>
+      <view class="table-right">
+        <scroll-view scroll-x="{{true}}">
+          <view class="table fixbox1" style="text-align: {{ compareDateBuilding.length ==1 ? 'center' : 'left'}}">
+            <view class="table-thead">
+              <view class="table-row">
+                <view class="table-col col-fixed">{{fixedData1[0]}}</view>
+                <view class="table-col" wx:for="{{compareDateBuilding}}" wx:key="{{item.building_id}}">{{item.building_name}}</view>
+              </view>
+            </view>
+            <view class="table-tbody">
+              <view class="table-row" wx:for="{{fixedData1}}" wx:key="index" wx:if="{{index > 0}}">
+                <view class="table-col col-fixed">{{item}}</view>
+                <view class="table-col" wx:for="{{compareDateBuilding}}" wx:for-item="bditem" wx:for-index="bdindex" wx:key="{{item.building_id}}">
+                  <block wx:if="{{index == 1}}">{{bditem.food || 0}}</block> <!-- 餐饮（个） -->
+                  <block wx:elif="{{index == 2}}">{{bditem.hotel || 0}}</block> <!-- 酒店（个） -->
+                  <block wx:elif="{{index == 3}}">{{bditem.bank || 0}}</block> <!-- 银行（个） -->
+                  <block wx:elif="{{index == 4}}">{{bditem.shop || 0}}</block> <!-- 购物（个） -->
+                  <block wx:elif="{{index == 5}}">{{bditem.coffee || 0}}</block> <!-- 咖啡馆（个） -->
+                  <block wx:else>{{bditem.building || 0}}</block> <!-- 写字楼（个） -->
+                </view>
+              </view>
+            </view>
+          </view>
+        </scroll-view>
+      </view>
+    </view>
+  </view>
+  <!-- end: 周边配套 -->
+</view>
